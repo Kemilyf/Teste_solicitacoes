@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+    <title>Atualizar Solicitação</title>
+</head>
+<body>
+    <div style="max-width: 600px; margin: 40px auto; padding: 2em; background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2>Atualizar Status da Solicitação #{{ solicitacao.id }}</h2>
+        <p><strong>Endereço:</strong> {{ solicitacao.endereco }}</p>
+        
+        <form method="POST" action="{{ url_for('atualizar_solicitacao', id=solicitacao.id) }}">
+            <label for="novo_status" style="display: block; margin-top: 1.5em; font-weight: bold;">Alterar status para:</label>
+            <select id="novo_status" name="novo_status" style="width: 100%; padding: 0.8em; border-radius: 5px; border: 1px solid #ccc; font-size: 1em;">
+                <option value="Recebida" {% if solicitacao.status == 'Recebida' %}selected{% endif %}>Recebida</option>
+                <option value="Em Análise" {% if solicitacao.status == 'Em Análise' %}selected{% endif %}>Em Análise</option>
+                <option value="Aprovada" {% if solicitacao.status == 'Aprovada' %}selected{% endif %}>Aprovada</option>
+                <option value="Concluída" {% if solicitacao.status == 'Concluída' %}selected{% endif %}>Concluída</option>
+                <option value="Rejeitada" {% if solicitacao.status == 'Rejeitada' %}selected{% endif %}>Rejeitada</option>
+            </select>
+            <input type="submit" value="Salvar Alteração" style="width: 100%; padding: 0.8em; background-color: #0b3c7b; color: white; cursor: pointer; border: none; margin-top: 2em; font-weight: bold;">
+        </form>
+        <a href="{{ url_for('painel_de_solicitacoes') }}" style="display: inline-block; margin-top: 20px; color: #0b3c7b; text-decoration: none; font-weight: bold;">← Voltar para o Painel</a>
+    </div>
+</body>
+</html>

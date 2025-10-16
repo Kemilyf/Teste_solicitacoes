@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+    <title>Painel de Solicitações</title>
+</head>
+<body>
+    <h1>Painel de Gerenciamento de Solicitações</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Protocolo</th>
+                <th>Endereço</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th>Ações</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in solicitacoes %}
+            <tr>
+                <td>#{{ s.id }}</td>
+                <td>{{ s.endereco }}</td>
+                <td>{{ s.descricao }}</td>
+                <td>{{ s.status }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('pagina_de_atualizacao', id=s.id) }}" class="btn-edit">Atualizar</a>
+                   <button onclick='abrirModalConfirmacao(1)' class="btn-cancel">Cancelar</button>
+                    <form id="form-cancelar-{{ s.id }}" action="{{ url_for('cancelar_solicitacao', id=s.id) }}" method="POST" style="display: none;"></form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div id="cancelModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+      <div style="background-color: #fff; margin: 15% auto; padding: 25px; border-radius: 8px; width: 90%; max-width: 450px; text-align: center;">
+        <h3>Confirmar Cancelamento</h3>
+        <p>Tem certeza que deseja cancelar esta solicitação?</p>
+        <div>
+            <button id="btn-confirmar-cancelamento" style="background-color: #dc3545; color: white; padding: 10px 24px; margin: 10px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold;">Sim, cancelar</button>
+            <button onclick="fecharModal()" style="padding: 10px 24px; margin: 10px; cursor: pointer;">Não</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('cancelModal');
+        const btnConfirmar = document.getElementById('btn-confirmar-cancelamento');
+        let idParaCancelar = null;
+        function abrirModalConfirmacao(id) { idParaCancelar = id; modal.style.display = 'block'; }
+        function fecharModal() { modal.style.display = 'none'; }
+        btnConfirmar.onclick = function() { if (idParaCancelar) { document.getElementById('form-cancelar-' + idParaCancelar).submit(); } }
+    </script>
+</body>
+</html>

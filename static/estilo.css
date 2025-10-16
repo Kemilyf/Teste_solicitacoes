@@ -1,0 +1,42 @@
+/* ARQUIVO: static/estilo.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333333;
+    margin: 20px;
+}
+h1 {
+    color: #0b3c7b;
+    border-bottom: 3px solid #d4ac0d;
+    padding-bottom: 10px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+}
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+    text-align: left;
+}
+th {
+    background-color: #0b3c7b;
+    color: white;
+    font-weight: bold;
+}
+tr:nth-child(even) { background-color: #f8f8f8; }
+.actions a, .actions button {
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 5px;
+}
+.btn-edit { background-color: #d4ac0d; }
+.btn-cancel { background-color: #dc3545; }
