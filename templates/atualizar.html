@@ -9,41 +9,55 @@
 <body>
 
     <header class="header">
-        <img src="https://www.portovelho.ro.gov.br/arquivos/imagens/2017/12/12/padrao_121217_110609.png" alt="Logo Prefeitura de Porto Velho">
+        <img src="https://www.portovelho.ro.gov.br/assets/site/img/logos/Prefeitura_Horizontal_Azul.svg" alt="Gerenciamento de Solicitações - Prefeitura de Porto Velho">
     </header>
 
-    <main class="container">
-        <h2>Analisar Solicitação #{{ solicitacao.id }}</h2>
-        
-        <p><strong>Categoria:</strong> {{ solicitacao.categoria }}</p>
-        <p><strong>Endereço:</strong> {{ solicitacao.endereco }}</p>
-        <p><strong>Descrição do Cidadão:</strong> {{ solicitacao.descricao }}</p>
-        
-        <form id="analysis-form" method="POST" action="{{ url_for('atualizar_solicitacao', id=solicitacao.id) }}">
-            <label for="novo_status">Alterar status para:</label>
-            <select id="novo_status" name="novo_status">
-                <option value="Pendente" {% if solicitacao.status == 'Pendente' %}selected{% endif %}>Pendente</option>
-                <option value="Em Análise" {% if solicitacao.status == 'Em Análise' %}selected{% endif %}>Em Análise</option>
-                <option value="Agendada" {% if solicitacao.status == 'Agendada' %}selected{% endif %}>Agendada</option>
-                <option value="Em Andamento" {% if solicitacao.status == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
-                <option value="Concluída" {% if solicitacao.status == 'Concluída' %}selected{% endif %}>Concluída</option>
-                <option value="Cancelado" {% if solicitacao.status == 'Cancelado' %}selected{% endif %}>Cancelado</o ption>
-            </select>
+    <div class="content-wrapper">
+        <main class="container">
+            <h2>Analisar Solicitação #{{ solicitacao.id }}</h2>
+            
+            <p><strong>Categoria:</strong> {{ solicitacao.categoria }}</p>
+            <p><strong>Endereço:</strong> {{ solicitacao.endereco }}</p>
+            <p><strong>Descrição do Cidadão:</strong> {{ solicitacao.descricao }}</p>
+            
+            <form id="analysis-form" method="POST" action="{{ url_for('atualizar_solicitacao', id=solicitacao.id) }}">
+                <label for="novo_status">Alterar status para:</label>
+                <select id="novo_status" name="novo_status">
+                    <option value="Pendente" {% if solicitacao.status == 'Pendente' %}selected{% endif %}>Pendente</option>
+                    <option value="Em Análise" {% if solicitacao.status == 'Em Análise' %}selected{% endif %}>Em Análise</option>
+                    <option value="Agendada" {% if solicitacao.status == 'Agendada' %}selected{% endif %}>Agendada</option>
+                    <option value="Em Andamento" {% if solicitacao.status == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                    <option value="Concluída" {% if solicitacao.status == 'Concluída' %}selected{% endif %}>Concluída</option>
+                    <option value="Cancelado" {% if solicitacao.status == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                </select>
 
-            <div id="agendamento-div" style="display: none;">
-                <label for="data_agendamento">Agendar execução para:</label>
-                <input type="date" id="data_agendamento" name="data_agendamento" value="{{ solicitacao.data_agendamento }}">
-            </div>
+                <div id="agendamento-div" style="display: none;">
+                    <label for="data_agendamento">Agendar execução para:</label>
+                    <input type="date" id="data_agendamento" name="data_agendamento" value="{{ solicitacao.data_agendamento }}">
+                </div>
 
-            <label for="justificativa">Justificativa / Observação Interna:</label>
-            <textarea id="justificativa" name="justificativa" rows="4">{{ solicitacao.justificativa }}</textarea>
+                <label for="justificativa">Justificativa / Observação Interna:</label>
+                <textarea id="justificativa" name="justificativa" rows="4">{{ solicitacao.justificativa }}</textarea>
 
-            <input type="submit" value="Salvar Alterações">
-        </form>
-    </main>
+                <input type="submit" value="Salvar Alterações">
+            </form>
+        </main>
+    </div>
 
     <footer class="footer">
-        </footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Bras%C3%A3o_de_Porto_Velho.png" alt="Vamos mudar a nossa Porto Velho">
+            </div>
+            <div class="footer-info">
+                <p><strong>Prefeitura de Porto Velho</strong></p>
+                <address>R. Dom Pedro II, 826 - Centro<br>Porto Velho - RO, 76801-908</address>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 Four Source - Desenvolvido para o Berá Hackathon
+        </div>
+    </footer>
 
     <script>
         // 1. Pegamos as "ferramentas" que vamos usar

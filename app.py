@@ -1,9 +1,20 @@
 # ARQUIVO: app.py (Versão com Agendamento)
 
 from flask import Flask, render_template, request, redirect, url_for
+from datetime import datetime
+
 
 app = Flask(__name__)
 
+@app.template_filter('dateformat')
+def format_date(value, format='%d/%m/%Y'):
+    # Se o valor for nulo (sem data), retorna um traço.
+    if value is None or value == '':
+        return "-"
+    # Converte o texto da data para um objeto de data do Python
+    date_obj = datetime.strptime(value, '%Y-%m-%d')
+    # Formata o objeto de data para o texto no formato (DD/MM/YYYY)
+    return date_obj.strftime(format)
 # Nosso "banco de dados" agora com o campo 'data_agendamento'
 solicitacoes_db = [
     { 
@@ -26,11 +37,13 @@ solicitacoes_db = [
 
 @app.route("/")
 def painel_de_solicitacoes():
-    status_filtro = request.args.get('status')
-    dados_filtrados = solicitacoes_db
+    status_filtro = request.args.get('status', '')
+  
     if status_filtro:
         dados_filtrados = [s for s in solicitacoes_db if s['status'] == status_filtro]
-    return render_template('painel.html', solicitacoes=dados_filtrados)
+    else:
+        dados_filtrados = solicitacoes_db
+    return render_template('painel.html', solicitacoes=dados_filtrados,filtro_ativo=status_filtro)
 
 @app.route("/atualizar/<int:id>")
 def pagina_de_atualizacao(id):

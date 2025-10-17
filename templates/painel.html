@@ -9,70 +9,71 @@
 <body>
 
     <header class="header">
-        
-    <img src="https://www.portovelho.ro.gov.br/arquivos/imagens/2017/12/12/padrao_121217_110609.png" alt=" Vamos mudar a nossa Porto Velho">
-</header>
-       
+        <img src="https://www.portovelho.ro.gov.br/assets/site/img/logos/Prefeitura_Horizontal_Azul.svg" alt="Gerenciamento de Solicitações - Prefeitura de Porto Velho">
     </header>
 
-    <main class="container">
-        <h1>Painel de Gerenciamento de Solicitações</h1>
-        <form method="GET" action="/" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
-    <label for="status_filter" style="font-weight: bold;">Filtrar por Status:</label>
-    <select name="status" id="status_filter" onchange="this.form.submit()" style="padding: 8px; border-radius: 5px;">
-        <option value="">Todos</option>
-        <option value="Pendente">Pendente</option>
-        <option value="Em Análise">Em Análise</option>
-        <option value="Em Andamento">Em Andamento</option>
-        <option value="Concluída">Concluída</option>
-        <option value="Cancelado">Cancelado</option>
-    </select>
-</form>
-        <div class="table-responsive">
-           <table>
-    <thead>
-        <tr>
-            <th>Protocolo</th>
-            <th>Categoria</th>
-            <th>Endereço</th>
-            <th>Status</th>
-            <th>Data Agendada</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for s in solicitacoes %}
-        <tr>
-            <td>#{{ s.id }}</td>
-            <td>{{ s.categoria }}</td>
-            <td>{{ s.endereco }}</td>
-            <td>
-                {% if s.status == 'Pendente' %}<span class="status-pill status-pendente">Pendente</span>{% elif s.status == 'Em Análise' %}<span class="status-pill status-em-analise">Em Análise</span>{% elif s.status == 'Agendada' %}<span class="status-pill status-em-andamento">Agendada</span>{% elif s.status == 'Em Andamento' %}<span class="status-pill status-em-andamento">Em Andamento</span>{% elif s.status == 'Concluída' %}<span class="status-pill status-concluida">Concluída</span>{% elif s.status == 'Cancelado' %}<span class="status-pill status-cancelado">Cancelado</span>{% else %}{{ s.status }}{% endif %}
-            </td>
-            <td>
-                {% if s.data_agendamento %}
-                    {{ s.data_agendamento }}
-                {% else %}
-                    -
-                {% endif %}
-            </td>
-            <td class="actions">
-                <a href="{{ url_for('pagina_de_atualizacao', id=s.id) }}" class="btn-edit">Analisar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-        </div>
-    </main>
+    <div class="content-wrapper">
+        <main class="container">
+            <h1>Painel de Gerenciamento de Solicitações</h1>
+            
+            <form method="GET" action="/" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <label for="status_filter" style="font-weight: bold;">Filtrar por Status:</label>
+                <select name="status" id="status_filter" onchange="this.form.submit()" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+                    <option value="" {% if not filtro_ativo %}selected{% endif %}>Todos</option>
+                    <option value="Pendente" {% if filtro_ativo == 'Pendente' %}selected{% endif %}>Pendente</option>
+                    <option value="Em Análise" {% if filtro_ativo == 'Em Análise' %}selected{% endif %}>Em Análise</option>
+                    <option value="Agendada" {% if filtro_ativo == 'Agendada' %}selected{% endif %}>Agendada</option>
+                    <option value="Em Andamento" {% if filtro_ativo == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                    <option value="Concluída" {% if filtro_ativo == 'Concluída' %}selected{% endif %}>Concluída</option>
+                    <option value="Cancelado" {% if filtro_ativo == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                </select>
+            </form>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Protocolo</th>
+                            <th>Categoria</th>
+                            <th>Endereço</th>
+                            <th>Status</th>
+                            <th>Data Agendada</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in solicitacoes %}
+                        <tr>
+                            <td>#{{ s.id }}</td>
+                            <td>{{ s.categoria }}</td>
+                            <td>{{ s.endereco }}</td>
+                            <td>
+                                {% if s.status == 'Pendente' %}<span class="status-pill status-pendente">Pendente</span>
+                                {% elif s.status == 'Em Análise' %}<span class="status-pill status-em-analise">Em Análise</span>
+                                {% elif s.status == 'Agendada' %}<span class="status-pill status-agendada">Agendada</span>
+                                {% elif s.status == 'Em Andamento' %}<span class="status-pill status-em-andamento">Em Andamento</span>
+                                {% elif s.status == 'Concluída' %}<span class="status-pill status-concluida">Concluída</span>
+                                {% elif s.status == 'Cancelado' %}<span class="status-pill status-cancelado">Cancelado</span>
+                                {% else %}{{ s.status }}{% endif %}
+                            </td>
+                            <td>
+                                {{ s.data_agendamento | dateformat }}
+                            </td>
+                            <td class="actions">
+                                <a href="{{ url_for('pagina_de_atualizacao', id=s.id) }}" class="btn-edit">Analisar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
 
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <div class="footer-logo">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Bras%C3%A3o_de_Porto_Velho.png" alt="Vamos mudar a nossa Porto velho!">
-</div>
-</header>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Bras%C3%A3o_de_Porto_Velho.png" alt="Vamos mudar a nossa Porto Velho">
             </div>
             <div class="footer-info">
                 <p><strong>Prefeitura de Porto Velho</strong></p>
