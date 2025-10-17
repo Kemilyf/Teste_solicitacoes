@@ -7,53 +7,82 @@
     <title>Painel de Solicitações</title>
 </head>
 <body>
-    <h1>Painel de Gerenciamento de Solicitações</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Protocolo</th>
-                <th>Endereço</th>
-                <th>Descrição</th>
-                <th>Status</th>
-                <th>Ações</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            {% for s in solicitacoes %}
-            <tr>
-                <td>#{{ s.id }}</td>
-                <td>{{ s.endereco }}</td>
-                <td>{{ s.descricao }}</td>
-                <td>{{ s.status }}</td>
-                <td class="actions">
-                    <a href="{{ url_for('pagina_de_atualizacao', id=s.id) }}" class="btn-edit">Atualizar</a>
-                   <button onclick='abrirModalConfirmacao(1)' class="btn-cancel">Cancelar</button>
-                    <form id="form-cancelar-{{ s.id }}" action="{{ url_for('cancelar_solicitacao', id=s.id) }}" method="POST" style="display: none;"></form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <div id="cancelModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
-      <div style="background-color: #fff; margin: 15% auto; padding: 25px; border-radius: 8px; width: 90%; max-width: 450px; text-align: center;">
-        <h3>Confirmar Cancelamento</h3>
-        <p>Tem certeza que deseja cancelar esta solicitação?</p>
-        <div>
-            <button id="btn-confirmar-cancelamento" style="background-color: #dc3545; color: white; padding: 10px 24px; margin: 10px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold;">Sim, cancelar</button>
-            <button onclick="fecharModal()" style="padding: 10px 24px; margin: 10px; cursor: pointer;">Não</button>
+    <header class="header">
+        
+    <img src="https://www.portovelho.ro.gov.br/arquivos/imagens/2017/12/12/padrao_121217_110609.png" alt=" Vamos mudar a nossa Porto Velho">
+</header>
+       
+    </header>
+
+    <main class="container">
+        <h1>Painel de Gerenciamento de Solicitações</h1>
+        <form method="GET" action="/" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+    <label for="status_filter" style="font-weight: bold;">Filtrar por Status:</label>
+    <select name="status" id="status_filter" onchange="this.form.submit()" style="padding: 8px; border-radius: 5px;">
+        <option value="">Todos</option>
+        <option value="Pendente">Pendente</option>
+        <option value="Em Análise">Em Análise</option>
+        <option value="Em Andamento">Em Andamento</option>
+        <option value="Concluída">Concluída</option>
+        <option value="Cancelado">Cancelado</option>
+    </select>
+</form>
+        <div class="table-responsive">
+           <table>
+    <thead>
+        <tr>
+            <th>Protocolo</th>
+            <th>Categoria</th>
+            <th>Endereço</th>
+            <th>Status</th>
+            <th>Data Agendada</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in solicitacoes %}
+        <tr>
+            <td>#{{ s.id }}</td>
+            <td>{{ s.categoria }}</td>
+            <td>{{ s.endereco }}</td>
+            <td>
+                {% if s.status == 'Pendente' %}<span class="status-pill status-pendente">Pendente</span>{% elif s.status == 'Em Análise' %}<span class="status-pill status-em-analise">Em Análise</span>{% elif s.status == 'Agendada' %}<span class="status-pill status-em-andamento">Agendada</span>{% elif s.status == 'Em Andamento' %}<span class="status-pill status-em-andamento">Em Andamento</span>{% elif s.status == 'Concluída' %}<span class="status-pill status-concluida">Concluída</span>{% elif s.status == 'Cancelado' %}<span class="status-pill status-cancelado">Cancelado</span>{% else %}{{ s.status }}{% endif %}
+            </td>
+            <td>
+                {% if s.data_agendamento %}
+                    {{ s.data_agendamento }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td class="actions">
+                <a href="{{ url_for('pagina_de_atualizacao', id=s.id) }}" class="btn-edit">Analisar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
         </div>
-      </div>
-    </div>
+    </main>
 
-    <script>
-        const modal = document.getElementById('cancelModal');
-        const btnConfirmar = document.getElementById('btn-confirmar-cancelamento');
-        let idParaCancelar = null;
-        function abrirModalConfirmacao(id) { idParaCancelar = id; modal.style.display = 'block'; }
-        function fecharModal() { modal.style.display = 'none'; }
-        btnConfirmar.onclick = function() { if (idParaCancelar) { document.getElementById('form-cancelar-' + idParaCancelar).submit(); } }
-    </script>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="footer-logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Bras%C3%A3o_de_Porto_Velho.png" alt="Vamos mudar a nossa Porto velho!">
+</div>
+</header>
+            </div>
+            <div class="footer-info">
+                <p><strong>Prefeitura de Porto Velho</strong></p>
+                <address>R. Dom Pedro II, 826 - Centro<br>Porto Velho - RO, 76801-908</address>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 Four Source - Protótipo desenvolvido para o Berá Hackathon
+        </div>
+    </footer>
+
 </body>
 </html>

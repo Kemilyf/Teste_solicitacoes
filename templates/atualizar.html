@@ -4,25 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
-    <title>Atualizar Solicitação</title>
+    <title>Analisar Solicitação</title>
 </head>
 <body>
-    <div style="max-width: 600px; margin: 40px auto; padding: 2em; background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <h2>Atualizar Status da Solicitação #{{ solicitacao.id }}</h2>
-        <p><strong>Endereço:</strong> {{ solicitacao.endereco }}</p>
+
+    <header class="header">
+        <img src="https://www.portovelho.ro.gov.br/arquivos/imagens/2017/12/12/padrao_121217_110609.png" alt="Logo Prefeitura de Porto Velho">
+    </header>
+
+    <main class="container">
+        <h2>Analisar Solicitação #{{ solicitacao.id }}</h2>
         
-        <form method="POST" action="{{ url_for('atualizar_solicitacao', id=solicitacao.id) }}">
-            <label for="novo_status" style="display: block; margin-top: 1.5em; font-weight: bold;">Alterar status para:</label>
-            <select id="novo_status" name="novo_status" style="width: 100%; padding: 0.8em; border-radius: 5px; border: 1px solid #ccc; font-size: 1em;">
-                <option value="Recebida" {% if solicitacao.status == 'Recebida' %}selected{% endif %}>Recebida</option>
+        <p><strong>Categoria:</strong> {{ solicitacao.categoria }}</p>
+        <p><strong>Endereço:</strong> {{ solicitacao.endereco }}</p>
+        <p><strong>Descrição do Cidadão:</strong> {{ solicitacao.descricao }}</p>
+        
+        <form id="analysis-form" method="POST" action="{{ url_for('atualizar_solicitacao', id=solicitacao.id) }}">
+            <label for="novo_status">Alterar status para:</label>
+            <select id="novo_status" name="novo_status">
+                <option value="Pendente" {% if solicitacao.status == 'Pendente' %}selected{% endif %}>Pendente</option>
                 <option value="Em Análise" {% if solicitacao.status == 'Em Análise' %}selected{% endif %}>Em Análise</option>
-                <option value="Aprovada" {% if solicitacao.status == 'Aprovada' %}selected{% endif %}>Aprovada</option>
+                <option value="Agendada" {% if solicitacao.status == 'Agendada' %}selected{% endif %}>Agendada</option>
+                <option value="Em Andamento" {% if solicitacao.status == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
                 <option value="Concluída" {% if solicitacao.status == 'Concluída' %}selected{% endif %}>Concluída</option>
-                <option value="Rejeitada" {% if solicitacao.status == 'Rejeitada' %}selected{% endif %}>Rejeitada</option>
+                <option value="Cancelado" {% if solicitacao.status == 'Cancelado' %}selected{% endif %}>Cancelado</o ption>
             </select>
-            <input type="submit" value="Salvar Alteração" style="width: 100%; padding: 0.8em; background-color: #0b3c7b; color: white; cursor: pointer; border: none; margin-top: 2em; font-weight: bold;">
+
+            <div id="agendamento-div" style="display: none;">
+                <label for="data_agendamento">Agendar execução para:</label>
+                <input type="date" id="data_agendamento" name="data_agendamento" value="{{ solicitacao.data_agendamento }}">
+            </div>
+
+            <label for="justificativa">Justificativa / Observação Interna:</label>
+            <textarea id="justificativa" name="justificativa" rows="4">{{ solicitacao.justificativa }}</textarea>
+
+            <input type="submit" value="Salvar Alterações">
         </form>
-        <a href="{{ url_for('painel_de_solicitacoes') }}" style="display: inline-block; margin-top: 20px; color: #0b3c7b; text-decoration: none; font-weight: bold;">← Voltar para o Painel</a>
-    </div>
+    </main>
+
+    <footer class="footer">
+        </footer>
+
+    <script>
+        // 1. Pegamos as "ferramentas" que vamos usar
+        const form = document.getElementById('analysis-form');
+        const statusSelect = document.getElementById('novo_status');
+        const justificationText = document.getElementById('justificativa');
+        const agendamentoDiv = document.getElementById('agendamento-div');
+
+        // 2. Criamos a função que mostra ou esconde o campo de data
+        function toggleAgendamento() {
+            const status = statusSelect.value;
+            if (status === 'Agendada' || status === 'Em Andamento' || status === 'Concluída') {
+                agendamentoDiv.style.display = 'block';
+            } else {
+                agendamentoDiv.style.display = 'none';
+            }
+        }
+
+        // 3. Ensinamos o sistema a "ouvir" o envio do formulário
+        form.addEventListener('submit', function(event) {
+            if (statusSelect.value === 'Cancelado' && justificationText.value.trim() === '') {
+                event.preventDefault();
+                alert('Por favor, preencha o campo de justificativa para cancelar a solicitação.');
+                justificationText.focus();
+            }
+        });
+
+        // 4. Ensinamos o sistema a "ouvir" qualquer mudança no menu de status
+        statusSelect.addEventListener('change', toggleAgendamento);
+
+        // 5. Executamos a função uma vez assim que a página carrega
+        toggleAgendamento();
+    </script>
+
 </body>
 </html>
