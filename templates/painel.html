@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    
     <title>Painel de Solicitações</title>
 </head>
 <body>
@@ -15,7 +19,7 @@
     <div class="content-wrapper">
         <main class="container">
             <h1>Painel de Gerenciamento de Solicitações</h1>
-            
+
             <form method="GET" action="/" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <label for="status_filter" style="font-weight: bold;">Filtrar por Status:</label>
                 <select name="status" id="status_filter" onchange="this.form.submit()" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
@@ -30,7 +34,7 @@
             </form>
 
             <div class="table-responsive">
-                <table>
+                <table id="tabela-solicitacoes" class="display" style="width:100%"> 
                     <thead>
                         <tr>
                             <th>Protocolo</th>
@@ -54,8 +58,8 @@
                                 {% elif s.status == 'Em Andamento' %}<span class="status-pill status-em-andamento">Em Andamento</span>
                                 {% elif s.status == 'Concluída' %}<span class="status-pill status-concluida">Concluída</span>
                                 {% elif s.status == 'Cancelado' %}<span class="status-pill status-cancelado">Cancelado</span>
-                                {% else %}{{ s.status }}{% endif %}
-                            </td>
+                                {% else %}{{ s.status }}
+                                {% endif %} </td>
                             <td>
                                 {{ s.data_agendamento | dateformat }}
                             </td>
@@ -68,12 +72,10 @@
                 </table>
             </div>
         </main>
-    </div>
-
-    <footer class="footer">
+    </div> <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Bras%C3%A3o_de_Porto_Velho.png" alt="Vamos mudar a nossa Porto Velho">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Bras%C3%A3o_de_Porto_Velho.png" alt="">
             </div>
             <div class="footer-info">
                 <p><strong>Prefeitura de Porto Velho</strong></p>
@@ -81,9 +83,22 @@
             </div>
         </div>
         <div class="footer-bottom">
-            © 2025 Four Source - Protótipo desenvolvido para o Berá Hackathon
+            © 2025 Solicity - Protótipo desenvolvido para o Berá Hackathon
         </div>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script> 
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#tabela-solicitacoes').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-BR.json', 
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
